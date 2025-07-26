@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using _Project.Scripts.Utils;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -24,16 +23,13 @@ namespace _Project.Scripts.Roulette_Table
         [SerializeField, Range(5, 20)] private float alignmentToleranceAngle = 10f;
 
         [Space] [SerializeField] private List<Transform> numberPoints;
-
-        private float[] _numberPositions = new float[37];
-        private bool _isGameSpinning = false;
+        
+        private bool _isGameSpinning;
         private float _currentSpinSpeed;
         private Coroutine _speedTransitionCoroutine;
         private int _targetNumber;
-
         private void Start()
         {
-            InitializeNumberPositions();
             _currentSpinSpeed = idleSpinSpeed;
         }
 
@@ -48,21 +44,7 @@ namespace _Project.Scripts.Roulette_Table
                 SpinToNumber(Random.Range(0, 37), (n) => { print("Number :" + n); });
             }
         }
-
-        void InitializeNumberPositions()
-        {
-            int[] wheelOrder =
-            {
-                0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10,
-                5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
-            };
-
-            for (int i = 0; i < wheelOrder.Length; i++)
-            {
-                _numberPositions[wheelOrder[i]] = (360f / 37f) * i;
-            }
-        }
-
+        
         private void SetWheelSpeed(float targetSpeed)
         {
             if (_speedTransitionCoroutine != null)
@@ -117,7 +99,7 @@ namespace _Project.Scripts.Roulette_Table
 
             yield return StartCoroutine(SpinBall(targetNumber, spinDuration));
             ReturnToIdleSpin();
-            yield return StartCoroutine(BallSettleAnimation(targetNumber));
+            yield return StartCoroutine(BallSettleAnimation());
 
             //ballTransform.SetParent(wheelTransform);
             // yield return Extension.GetWaitForSeconds(1f);
@@ -139,8 +121,6 @@ namespace _Project.Scripts.Roulette_Table
             float ballDirection = 1f; // Always counter-clockwise
 
             float ballAngle = 0f; // Track cumulative ball angle
-
-            var isAligned = false;
 
             while (elapsed < duration)
             {
@@ -224,17 +204,12 @@ namespace _Project.Scripts.Roulette_Table
             Gizmos.color = Color.blue;
             Gizmos.DrawLine(centerPosition, centerPosition + slotDir * ballSpinRadius);
         }
-        
 
-        private IEnumerator BallSettleAnimation(int targetNumber)
+        private IEnumerator BallSettleAnimation()
         {
             if (ballTransform == null) yield break;
             
             // play bounce sound
-
-            Vector3 centerPosition = transform.position;
-            print(ballTransform.parent?.name + " " + ballTransform.localPosition);
-
             var finalPosition = Vector3.zero;
             var settleTime = 1.2f;
             var startPosition = ballTransform.localPosition;
@@ -247,15 +222,15 @@ namespace _Project.Scripts.Roulette_Table
                 var bounceIntensity = (1f - progress) * .2f;
                 var bounce = Mathf.Abs(Mathf.Sin(progress * bounceCount * Mathf.PI)) * bounceIntensity;
 
-                var chaosFreq = 15f;
-                var chaosIntensity = (1f - progress) * .04f;
-                var lateralChaos = Mathf.Sin(progress * chaosFreq) * chaosIntensity;
+                // var chaosFreq = 15f;
+                // var chaosIntensity = (1f - progress) * .04f;
+                // var lateralChaos = Mathf.Sin(progress * chaosFreq) * chaosIntensity;
 
                 var currentPos = Vector3.Lerp(startPosition, finalPosition, progress);
                 currentPos.y += bounce;
 
-                var perpendicular = new Vector3(-finalPosition.z, 0, finalPosition.x).normalized;
-                currentPos += perpendicular * lateralChaos;
+                //var perpendicular = new Vector3(-finalPosition.z, 0, finalPosition.x).normalized;
+                //currentPos += perpendicular * lateralChaos;
 
                 ballTransform.localPosition = currentPos;
                 yield return null;
