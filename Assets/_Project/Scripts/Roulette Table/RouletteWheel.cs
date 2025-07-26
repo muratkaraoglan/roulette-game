@@ -14,20 +14,29 @@ namespace _Project.Scripts.Roulette_Table
         [Header("Spinning")] [SerializeField] private float idleSpinSpeed = 30f;
         [SerializeField] private float gameSpinSpeed = 100f;
         [SerializeField] private float speedTransitionTime = 2f;
+        [SerializeField] private float rotationSpeedRate = 6f;
+        [SerializeField] private float ballStartSpeed = 380f;
+        [SerializeField] private float ballEndSpeed = 100f;
+        [SerializeField, Range(0.6f, 0.75f)] private float reducedSpinRadiusRatio = .7f;
 
         [Header("Animation Settings")] [SerializeField]
         private float minSpinDuration = 4f;
-
         [SerializeField] private float maxSpinDuration = 6f;
         [SerializeField] private float ballSpinRadius = 2f;
         [SerializeField, Range(5, 20)] private float alignmentToleranceAngle = 10f;
 
+        [Header("Settle Settings")] [SerializeField,Min(1)]
+        private int bounceCount = 6;
+        [SerializeField,Min(1f)] private float settleTime = 1.2f;
+        [SerializeField] private float bounceIntensityRate = .2f;
+        [SerializeField,Min(.1f)] private float finalSettleBounceTime = .4f;
         [Space] [SerializeField] private List<Transform> numberPoints;
-        
+
         private bool _isGameSpinning;
         private float _currentSpinSpeed;
         private Coroutine _speedTransitionCoroutine;
         private int _targetNumber;
+
         private void Start()
         {
             _currentSpinSpeed = idleSpinSpeed;
@@ -36,7 +45,7 @@ namespace _Project.Scripts.Roulette_Table
         private void Update()
         {
             if (!wheelTransform) return;
-            var rotationSpeed = _currentSpinSpeed * 6f;
+            var rotationSpeed = _currentSpinSpeed * rotationSpeedRate;
             wheelTransform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -44,7 +53,7 @@ namespace _Project.Scripts.Roulette_Table
                 SpinToNumber(Random.Range(0, 37), (n) => { print("Number :" + n); });
             }
         }
-        
+
         private void SetWheelSpeed(float targetSpeed)
         {
             if (_speedTransitionCoroutine != null)
@@ -103,7 +112,7 @@ namespace _Project.Scripts.Roulette_Table
 
             //ballTransform.SetParent(wheelTransform);
             // yield return Extension.GetWaitForSeconds(1f);
-            
+
             _isGameSpinning = false;
             onComplete?.Invoke(targetNumber);
         }
@@ -114,9 +123,6 @@ namespace _Project.Scripts.Roulette_Table
 
             var elapsed = 0f;
             var centerPosition = transform.position;
-
-            var ballStartSpeed = 380f;
-            var ballEndSpeed = 100f;
 
             float ballDirection = 1f; // Always counter-clockwise
 
@@ -136,7 +142,7 @@ namespace _Project.Scripts.Roulette_Table
 
                 // Ball radius decreases as it slows down (spiral effect)
                 float radiusProgress = Mathf.Pow(progress, 0.2f); // Slower radius change
-                float currentRadius = Mathf.Lerp(ballSpinRadius, ballSpinRadius * 0.65f, radiusProgress);
+                float currentRadius = Mathf.Lerp(ballSpinRadius, ballSpinRadius * reducedSpinRadiusRatio, radiusProgress);
 
                 // Add realistic vertical bounce and wobble
                 float bounceFrequency = Mathf.Lerp(25f, 8f, progress); // Slower bounces as ball slows
@@ -163,13 +169,14 @@ namespace _Project.Scripts.Roulette_Table
             {
                 ballAngle += ballEndSpeed * ballDirection * Time.deltaTime;
                 Vector3 ballPosition = centerPosition + new Vector3(
-                    Mathf.Cos(ballAngle * Mathf.Deg2Rad) * ballSpinRadius * 0.7f,
+                    Mathf.Cos(ballAngle * Mathf.Deg2Rad) * ballSpinRadius * reducedSpinRadiusRatio,
                     currentHeight,
-                    Mathf.Sin(ballAngle * Mathf.Deg2Rad) * ballSpinRadius * 0.7f
+                    Mathf.Sin(ballAngle * Mathf.Deg2Rad) * ballSpinRadius * reducedSpinRadiusRatio
                 );
                 ballTransform.position = ballPosition;
                 yield return null;
             }
+
             ballTransform.SetParent(numberPoints[targetNumber], true);
             print("Spinning finished");
         }
@@ -204,22 +211,20 @@ namespace _Project.Scripts.Roulette_Table
             Gizmos.color = Color.blue;
             Gizmos.DrawLine(centerPosition, centerPosition + slotDir * ballSpinRadius);
         }
-
+        
         private IEnumerator BallSettleAnimation()
         {
             if (ballTransform == null) yield break;
-            
+
             // play bounce sound
             var finalPosition = Vector3.zero;
-            var settleTime = 1.2f;
             var startPosition = ballTransform.localPosition;
 
             for (float t = 0f; t < settleTime; t += Time.deltaTime)
             {
                 float progress = t / settleTime;
-
-                var bounceCount = 6f;
-                var bounceIntensity = (1f - progress) * .2f;
+                
+                var bounceIntensity = (1f - progress) * bounceIntensityRate;
                 var bounce = Mathf.Abs(Mathf.Sin(progress * bounceCount * Mathf.PI)) * bounceIntensity;
 
                 // var chaosFreq = 15f;
@@ -243,10 +248,9 @@ namespace _Project.Scripts.Roulette_Table
 
         private IEnumerator FinalSettleBounce(Vector3 finalPosition)
         {
-            var bounceTime = .4f;
-            for (float t = 0; t < bounceTime; t += Time.deltaTime)
+            for (float t = 0; t < finalSettleBounceTime; t += Time.deltaTime)
             {
-                var progress = t / bounceTime;
+                var progress = t / finalSettleBounceTime;
                 var bounce = Mathf.Sin(progress * Mathf.PI / 2f) * 0.015f * (1f - progress);
 
                 var pos = finalPosition;
