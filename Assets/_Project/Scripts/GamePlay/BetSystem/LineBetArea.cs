@@ -1,8 +1,9 @@
 using _Project.Scripts.Core.Event;
+using _Project.Scripts.Core.Interact;
 
 namespace _Project.Scripts.GamePlay.BetSystem
 {
-    public class LineBetArea : BaseBetArea
+    public class LineBetArea : BaseBetArea, IBetAreaInteractable
     {
         public void OnMouseDown()
         {

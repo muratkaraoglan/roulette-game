@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60ffb8785c9d4ca2a2987ca70325f2bb, type: 3}
-  m_Name: Street-4,5,6
+  m_Name: Line-22,23,24,25,26,27
   m_EditorClassIdentifier: 
-  <PayoutMultiplier>k__BackingField: 11
-  <CoveredNumbers>k__BackingField: 040000000500000006000000
+  <PayoutMultiplier>k__BackingField: 5
+  <CoveredNumbers>k__BackingField: 160000001700000018000000190000001a0000001b000000

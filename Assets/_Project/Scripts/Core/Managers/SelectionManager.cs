@@ -12,6 +12,7 @@ namespace _Project.Scripts.Core.Managers
         private Vector2 _mouseDownPosition;
         private Plane _plane = new Plane(Vector3.up, Vector3.zero);
         private IInteractable _interactable;
+
         private void Update()
         {
             if (Input.GetMouseButtonDown(0))
@@ -39,7 +40,7 @@ namespace _Project.Scripts.Core.Managers
                 _interactable = null;
             }
         }
-        
+
         private IInteractable HandleBetArea()
         {
             var ray = raycastCamera.ScreenPointToRay(_mouseDownPosition);
@@ -49,9 +50,11 @@ namespace _Project.Scripts.Core.Managers
                 {
                     _interactable = interactable;
                     _interactable.OnMouseDown();
+                    Debug.DrawLine(ray.origin, hit.point, Color.red,1f);
                     return interactable;
                 }
             }
+
             return null;
         }
     }
