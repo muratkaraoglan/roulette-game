@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using _Project.Scripts.Core.Event;
+using _Project.Scripts.Core.Managers;
 using _Project.Scripts.GamePlay.ChipSystem;
 using UnityEngine;
 
@@ -9,8 +9,7 @@ namespace _Project.Scripts.GamePlay.BetSystem
     public class BetManager : MonoBehaviour
     {
         [SerializeField] private int money = 500;
-        [SerializeField] private List<Bet> bets = new();
-        
+
         private readonly Dictionary<string, int> _betAreasCount = new();
 
         private void OnEnable()
@@ -18,9 +17,27 @@ namespace _Project.Scripts.GamePlay.BetSystem
             GameEventManager.Instance.BetAreaEvents.TryPlaceChip += TryPlaceChip;
         }
 
+        private void Start()
+        {
+            InitializeBets();
+        }
+
         private void OnDisable()
         {
             GameEventManager.Instance.BetAreaEvents.TryPlaceChip -= TryPlaceChip;
+        }
+
+        private void InitializeBets()
+        {
+            var bets = DataManager.Instance.betDataService.GetAllBets();
+            foreach (var bet in bets)
+            {
+                var currentCount = _betAreasCount.GetValueOrDefault(bet.betAreaName, 0);
+                currentCount++;
+                _betAreasCount[bet.betAreaName] = currentCount;
+                ChipManager.Instance.InstantiateChip(bet.chip, bet.position);
+            }
+            bets.Clear();
         }
 
         private void TryPlaceChip(Transform betArea, int payoutMultiplier, int[] coveredNumbers)
@@ -36,10 +53,8 @@ namespace _Project.Scripts.GamePlay.BetSystem
                 position.z += betCount * .03f;
                 var bet = new Bet(betArea.name, (int)selectedChip, payoutMultiplier, coveredNumbers, selectedChip,
                     position);
-                bets.Add(bet);
-                var totalBet = bets.Sum(b => b.amount);
+                DataManager.Instance.betDataService.PlaceBet(bet);
                 //money -= (int)selectedChip;
-                GameEventManager.Instance.BetAreaEvents.RaiseOnBetPlaced(totalBet);
                 ChipManager.Instance.InstantiateChip(selectedChip, position);
             }
             else

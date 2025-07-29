@@ -1,5 +1,4 @@
-using System;
-using _Project.Scripts.Core.Event;
+using _Project.Scripts.GamePlay.BetSystem;
 using TMPro;
 using UnityEngine;
 
@@ -12,16 +11,17 @@ namespace _Project.Scripts.Core.Managers
 
         private void OnEnable()
         {
-            GameEventManager.Instance.BetAreaEvents.OnBetPlaced += OnBetPlaced;
+            DataManager.Instance.betDataService.OnBetPlaced += OnBetPlaced;
         }
 
         private void OnDisable()
         {
-            GameEventManager.Instance.BetAreaEvents.OnBetPlaced -= OnBetPlaced;
+            DataManager.Instance.betDataService.OnBetPlaced -= OnBetPlaced;
         }
 
-        private void OnBetPlaced(int totalBetAmount)
+        private void OnBetPlaced(Bet bet)
         {
+            var totalBetAmount = DataManager.Instance.betDataService.GetTotalBetAmount();
             totalBetText.text = totalBetAmount.ToString();
         }
     }
