@@ -48,6 +48,7 @@ namespace _Project.Scripts.GamePlay.BetSystem
             var newAmount= DataManager.Instance.BetDataService.CalculateAllBetAmount(targetNumber);
             DataManager.Instance.MoneyService.AddMoney(newAmount);
             DataManager.Instance.BetDataService.ClearAllBets();
+            _betAreasCount.Clear();
         }
 
         private void TryPlaceChip(Transform betArea, int payoutMultiplier, int[] coveredNumbers)
