@@ -30,6 +30,11 @@ namespace _Project.Scripts.Core.Managers
             if (Input.GetMouseButtonUp(0))
             {
                 _interactable?.OnMouseUp();
+                if (_interactable is IBetAreaInteractable betAreaInteractable)
+                {
+                    betAreaInteractable.TryPlaceBet();
+                }
+
                 _interactable = null;
             }
         }

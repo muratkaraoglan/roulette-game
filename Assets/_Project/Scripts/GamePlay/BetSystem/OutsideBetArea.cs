@@ -18,12 +18,12 @@ namespace _Project.Scripts.GamePlay.BetSystem
         {
             GameEventManager.Instance.BetAreaEvents.RaiseBetAreaHighlightEvent(betRule.CoveredNumbers, false);
             highlightGameObject.SetActive(false);
-            //check can place bet
         }
-
-        public bool TryPlaceBet()
+        
+        public void TryPlaceBet()
         {
-            return false;
+            GameEventManager.Instance.BetAreaEvents.RaiseTryPlaceChipEvent(transform, betRule.PayoutMultiplier,
+                betRule.CoveredNumbers);
         }
     }
 }

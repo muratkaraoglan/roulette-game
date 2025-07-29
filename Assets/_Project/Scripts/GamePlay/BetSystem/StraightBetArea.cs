@@ -41,12 +41,12 @@ namespace _Project.Scripts.GamePlay.BetSystem
         public void OnMouseUp()
         {
             ChangeHighlight(false);
-            //check can place bet
         }
-
-        public bool TryPlaceBet()
+        
+        public void TryPlaceBet()
         {
-            throw new System.NotImplementedException();
+            GameEventManager.Instance.BetAreaEvents.RaiseTryPlaceChipEvent(transform, betRule.PayoutMultiplier,
+                betRule.CoveredNumbers);
         }
     }
 }

@@ -1,10 +1,9 @@
-
 using _Project.Scripts.Core.Event;
 using _Project.Scripts.Core.Interact;
 
 namespace _Project.Scripts.GamePlay.BetSystem
 {
-    public class CornerBetArea : BaseBetArea,IBetAreaInteractable
+    public class CornerBetArea : BaseBetArea, IBetAreaInteractable
     {
         public void OnMouseDown()
         {
@@ -14,12 +13,11 @@ namespace _Project.Scripts.GamePlay.BetSystem
         public void OnMouseUp()
         {
             GameEventManager.Instance.BetAreaEvents.RaiseBetAreaHighlightEvent(betRule.CoveredNumbers, false);
-            //check can place bet
         }
-
-        public bool TryPlaceBet()
+        public void TryPlaceBet()
         {
-            return false;
+            GameEventManager.Instance.BetAreaEvents.RaiseTryPlaceChipEvent(transform, betRule.PayoutMultiplier,
+                betRule.CoveredNumbers);
         }
     }
 }

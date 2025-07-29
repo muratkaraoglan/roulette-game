@@ -13,14 +13,12 @@ namespace _Project.Scripts.GamePlay.BetSystem
         public void OnMouseUp()
         {
             GameEventManager.Instance.BetAreaEvents.RaiseBetAreaHighlightEvent(betRule.CoveredNumbers, false);
-            //check can place bet
         }
-
-        public bool TryPlaceBet()
+        
+        public void TryPlaceBet()
         {
-            //Bet manager try place
-            // send possible position for placement
-            return false;
+            GameEventManager.Instance.BetAreaEvents.RaiseTryPlaceChipEvent(transform, betRule.PayoutMultiplier,
+                betRule.CoveredNumbers);
         }
     }
 }

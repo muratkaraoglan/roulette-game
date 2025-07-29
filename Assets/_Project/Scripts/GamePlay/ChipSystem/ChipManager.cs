@@ -43,6 +43,12 @@ namespace _Project.Scripts.GamePlay.ChipSystem
             chipHighlightTransform.position = _highlightPointsMap[selectedChip];
         }
 
+        public void InstantiateChip(ChipEnum chip, Vector3 position)
+        {
+            var chipPrefab = _chipPrefabMap[chip];
+            Instantiate(_chipPrefabMap[chip], position, chipPrefab.transform.rotation);
+        }
+
         public ChipEnum GetSelectedChip() => selectedChip;
     }
 

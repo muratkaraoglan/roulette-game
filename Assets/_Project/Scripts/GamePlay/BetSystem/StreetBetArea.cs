@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _Project.Scripts.GamePlay.BetSystem
 {
-    public class StreetBetArea : BaseBetArea,IBetAreaInteractable
+    public class StreetBetArea : BaseBetArea, IBetAreaInteractable
     {
         public void OnMouseDown()
         {
@@ -14,12 +14,12 @@ namespace _Project.Scripts.GamePlay.BetSystem
         public void OnMouseUp()
         {
             GameEventManager.Instance.BetAreaEvents.RaiseBetAreaHighlightEvent(betRule.CoveredNumbers, false);
-            //check can place bet
         }
 
-        public bool TryPlaceBet()
+        public void TryPlaceBet()
         {
-            throw new System.NotImplementedException();
+            GameEventManager.Instance.BetAreaEvents.RaiseTryPlaceChipEvent(transform, betRule.PayoutMultiplier,
+                betRule.CoveredNumbers);
         }
     }
 }
