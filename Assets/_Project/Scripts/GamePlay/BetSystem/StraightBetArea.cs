@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Linq;
 using _Project.Scripts.Core.Event;
 using _Project.Scripts.Core.Interact;
+using _Project.Scripts.Utils;
 using UnityEngine;
 
 namespace _Project.Scripts.GamePlay.BetSystem
@@ -12,11 +14,13 @@ namespace _Project.Scripts.GamePlay.BetSystem
         private void OnEnable()
         {
             GameEventManager.Instance.BetAreaEvents.HighlightBetAreaEvent += HighlightBetAreaEvent;
+            GameEventManager.Instance.RouletteEvents.OnSpinComplete += OnSpinComplete;
         }
 
         private void OnDisable()
         {
             GameEventManager.Instance.BetAreaEvents.HighlightBetAreaEvent -= HighlightBetAreaEvent;
+            GameEventManager.Instance.RouletteEvents.OnSpinComplete -= OnSpinComplete;
         }
 
         private void HighlightBetAreaEvent(int[] coveredNumbers, bool highlightState)
@@ -31,6 +35,20 @@ namespace _Project.Scripts.GamePlay.BetSystem
             ChangeHighlight(contain);
         }
 
+
+        private void OnSpinComplete(int targetNumber)
+        {
+            var contain = betRule.CoveredNumbers.Contains(targetNumber);
+            if (contain) StartCoroutine(HighlightAnimation());
+        }
+        
+        IEnumerator HighlightAnimation()
+        {
+            ChangeHighlight(true);
+            yield return Extension.GetWaitForSeconds(TimeConstant.BetAreaResultAnimationTime);
+            ChangeHighlight(false);
+        }
+
         private void ChangeHighlight(bool highlightState) => highlightGameObject.SetActive(highlightState);
 
         public void OnMouseDown()
@@ -42,7 +60,7 @@ namespace _Project.Scripts.GamePlay.BetSystem
         {
             ChangeHighlight(false);
         }
-        
+
         public void TryPlaceBet()
         {
             GameEventManager.Instance.BetAreaEvents.RaiseTryPlaceChipEvent(transform, betRule.PayoutMultiplier,
