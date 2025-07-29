@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Project.Scripts.Core.Event;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -47,11 +48,6 @@ namespace _Project.Scripts.GamePlay.Roulette
             if (!wheelTransform) return;
             var rotationSpeed = _currentSpinSpeed * rotationSpeedRate;
             wheelTransform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                SpinToNumber(Random.Range(0, 37), (n) => { print("Number :" + n); });
-            }
         }
 
         private void SetWheelSpeed(float targetSpeed)
@@ -91,14 +87,14 @@ namespace _Project.Scripts.GamePlay.Roulette
             // spin sound
         }
 
-        public void SpinToNumber(int targetNumber, Action<int> onComplete)
+        public void SpinToNumber(int targetNumber)
         {
             if (_isGameSpinning) return;
             _targetNumber = targetNumber;
-            StartCoroutine(SpinAnimation(targetNumber, onComplete));
+            StartCoroutine(SpinAnimation(targetNumber));
         }
 
-        private IEnumerator SpinAnimation(int targetNumber, Action<int> onComplete)
+        private IEnumerator SpinAnimation(int targetNumber)
         {
             _isGameSpinning = true;
             ballTransform.SetParent(null);
@@ -114,7 +110,7 @@ namespace _Project.Scripts.GamePlay.Roulette
             // yield return Extension.GetWaitForSeconds(1f);
 
             _isGameSpinning = false;
-            onComplete?.Invoke(targetNumber);
+           GameEventManager.Instance.RouletteEvents.RaiseSpinComplete(targetNumber);
         }
 
         private IEnumerator SpinBall(int targetNumber, float duration)

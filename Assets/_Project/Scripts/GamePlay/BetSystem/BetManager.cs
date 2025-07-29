@@ -15,6 +15,7 @@ namespace _Project.Scripts.GamePlay.BetSystem
         private void OnEnable()
         {
             GameEventManager.Instance.BetAreaEvents.TryPlaceChip += TryPlaceChip;
+            GameEventManager.Instance.RouletteEvents.OnSpinComplete += OnSpinComplete;
         }
 
         private void Start()
@@ -25,11 +26,12 @@ namespace _Project.Scripts.GamePlay.BetSystem
         private void OnDisable()
         {
             GameEventManager.Instance.BetAreaEvents.TryPlaceChip -= TryPlaceChip;
+            GameEventManager.Instance.RouletteEvents.OnSpinComplete -= OnSpinComplete;
         }
 
         private void InitializeBets()
         {
-            var bets = DataManager.Instance.betDataService.GetAllBets();
+            var bets = DataManager.Instance.BetDataService.GetAllBets();
             foreach (var bet in bets)
             {
                 var currentCount = _betAreasCount.GetValueOrDefault(bet.betAreaName, 0);
@@ -37,13 +39,21 @@ namespace _Project.Scripts.GamePlay.BetSystem
                 _betAreasCount[bet.betAreaName] = currentCount;
                 ChipManager.Instance.InstantiateChip(bet.chip, bet.position);
             }
+
             bets.Clear();
+        }
+
+        private void OnSpinComplete(int targetNumber)
+        {
+            var newAmount= DataManager.Instance.BetDataService.CalculateAllBetAmount(targetNumber);
+            DataManager.Instance.MoneyService.AddMoney(newAmount);
+            DataManager.Instance.BetDataService.ClearAllBets();
         }
 
         private void TryPlaceChip(Transform betArea, int payoutMultiplier, int[] coveredNumbers)
         {
             var selectedChip = ChipManager.Instance.GetSelectedChip();
-            if ((int)selectedChip <= money)
+            if (DataManager.Instance.MoneyService.HasEnough((int)selectedChip))
             {
                 _betAreasCount.TryGetValue(betArea.name, out var betCount);
                 betCount++;
@@ -53,8 +63,8 @@ namespace _Project.Scripts.GamePlay.BetSystem
                 position.z += betCount * .03f;
                 var bet = new Bet(betArea.name, (int)selectedChip, payoutMultiplier, coveredNumbers, selectedChip,
                     position);
-                DataManager.Instance.betDataService.PlaceBet(bet);
-                //money -= (int)selectedChip;
+                DataManager.Instance.BetDataService.PlaceBet(bet);
+                DataManager.Instance.MoneyService.SubtractMoney((int)selectedChip);
                 ChipManager.Instance.InstantiateChip(selectedChip, position);
             }
             else

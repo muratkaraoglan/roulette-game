@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using _Project.Scripts.GamePlay.BetSystem;
 
 namespace _Project.Scripts.Core.Services
@@ -45,6 +46,20 @@ namespace _Project.Scripts.Core.Services
             foreach (var bet in _bets)
             {
                 total += bet.amount;
+            }
+
+            return total;
+        }
+
+        public int CalculateAllBetAmount(int targetNumber)
+        {
+            int total = 0;
+            for (int i = _bets.Count - 1; i > -1; i--)
+            {
+                if (_bets[i].coveredNumbers.Contains(targetNumber))
+                {
+                    total += _bets[i].amount * _bets[i].payoutMultiplier;
+                }
             }
 
             return total;

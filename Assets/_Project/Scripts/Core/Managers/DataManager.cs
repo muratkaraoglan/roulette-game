@@ -10,9 +10,10 @@ using UnityEngine.Serialization;
 namespace _Project.Scripts.Core.Managers
 {
     public class DataManager : Singleton<DataManager>
-    { 
-        [SerializeField] private Data data;
-        public BetDataService betDataService;
+    {
+        private Data data;
+        public BetDataService BetDataService;
+        public MoneyService MoneyService;
         private string _path;
 
         protected override void Awake()
@@ -29,10 +30,12 @@ namespace _Project.Scripts.Core.Managers
             if (LoadData() == null)
             {
                 data = new Data();
+                data.totalMoney = 5000;
                 data.bets = new();
             }
 
-            betDataService = new BetDataService(data.bets);
+            BetDataService = new BetDataService(data.bets);
+            MoneyService = new MoneyService(data.totalMoney);
         }
 
         private void OnApplicationQuit()
@@ -50,11 +53,12 @@ namespace _Project.Scripts.Core.Managers
 
         private void SaveData()
         {
-            data.bets = betDataService.GetAllBets();
+            data.bets = BetDataService.GetAllBets();
+            data.totalMoney = MoneyService.TotalMoney;
             string json = JsonUtility.ToJson(data);
             File.WriteAllText(_path, json);
         }
-        
+
         private Data LoadData()
         {
             if (!File.Exists(_path)) return null;
