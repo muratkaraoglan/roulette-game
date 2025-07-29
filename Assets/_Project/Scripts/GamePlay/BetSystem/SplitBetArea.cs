@@ -18,6 +18,8 @@ namespace _Project.Scripts.GamePlay.BetSystem
 
         public bool TryPlaceBet()
         {
+            //Bet manager try place
+            // send possible position for placement
             return false;
         }
     }

@@ -4,13 +4,14 @@ using UnityEngine;
 
 namespace _Project.Scripts.Core.Managers
 {
-    public class SelectionManager : MonoBehaviour
+    public sealed class SelectionManager : MonoBehaviour
     {
+        [SerializeField] private bool debug;
         [SerializeField] private float dragThresholdSqr = 10f;
         [SerializeField] private LayerMask selectionLayerMask;
         [SerializeField] private Camera raycastCamera;
         private Vector2 _mouseDownPosition;
-        private Plane _plane = new Plane(Vector3.up, Vector3.zero);
+
         private IInteractable _interactable;
 
         private void Update()
@@ -18,20 +19,12 @@ namespace _Project.Scripts.Core.Managers
             if (Input.GetMouseButtonDown(0))
             {
                 _mouseDownPosition = Input.mousePosition;
-                _interactable = HandleBetArea();
+                HandleInteract();
             }
 
             if (Input.GetMouseButton(0))
             {
-                Vector2 mousePosition = Input.mousePosition;
-                var delta = (mousePosition - _mouseDownPosition).sqrMagnitude;
-
-                if (delta >= dragThresholdSqr)
-                {
-                    _mouseDownPosition = mousePosition;
-                    _interactable?.OnMouseUp();
-                    _interactable = HandleBetArea();
-                }
+                OnDrag();
             }
 
             if (Input.GetMouseButtonUp(0))
@@ -41,7 +34,7 @@ namespace _Project.Scripts.Core.Managers
             }
         }
 
-        private IInteractable HandleBetArea()
+        private void HandleInteract()
         {
             var ray = raycastCamera.ScreenPointToRay(_mouseDownPosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 100f, selectionLayerMask))
@@ -50,12 +43,23 @@ namespace _Project.Scripts.Core.Managers
                 {
                     _interactable = interactable;
                     _interactable.OnMouseDown();
-                    Debug.DrawLine(ray.origin, hit.point, Color.red,1f);
-                    return interactable;
+                    if (debug)
+                        Debug.DrawLine(ray.origin, hit.point, Color.red, 1f);
                 }
             }
+        }
 
-            return null;
+        private void OnDrag()
+        {
+            Vector2 mousePosition = Input.mousePosition;
+            var delta = (mousePosition - _mouseDownPosition).sqrMagnitude;
+
+            if (delta >= dragThresholdSqr)
+            {
+                _mouseDownPosition = mousePosition;
+                _interactable?.OnMouseUp();
+                HandleInteract();
+            }
         }
     }
 }
