@@ -53,6 +53,6 @@ namespace _Project.Scripts.Core.Managers
     public class Data
     {
         public int totalMoney = 5000;
-        public List<Bet> bets;
+        public List<Bet> bets = new List<Bet>();
     }
 }

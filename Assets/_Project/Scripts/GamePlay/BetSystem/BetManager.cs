@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using _Project.Scripts.Core.Event;
 using _Project.Scripts.Core.Managers;
+using _Project.Scripts.Core.Stats;
 using _Project.Scripts.GamePlay.ChipSystem;
 using UnityEngine;
 
@@ -47,6 +48,7 @@ namespace _Project.Scripts.GamePlay.BetSystem
         {
             var newAmount = DataManager.Instance.BetDataService.CalculateAllBetAmount(targetNumber);
             DataManager.Instance.MoneyService.AddMoney(newAmount);
+            GameDataTracker.Instance.RecordSpin(targetNumber, DataManager.Instance.BetDataService.GetTotalBetAmount(),newAmount);
             DataManager.Instance.BetDataService.ClearAllBets();
             _betAreasCount.Clear();
         }
