@@ -21,13 +21,13 @@ namespace _Project.Scripts.GamePlay.BetSystem
             GameEventManager.Instance.RouletteEvents.OnSpinComplete -= OnSpinComplete;
         }
 
-        public void OnMouseDown()
+        public void OnSelect()
         {
             GameEventManager.Instance.BetAreaEvents.RaiseBetAreaHighlightEvent(betRule.CoveredNumbers, true);
             highlightGameObject.SetActive(true);
         }
 
-        public void OnMouseUp()
+        public void OnDeselect()
         {
             GameEventManager.Instance.BetAreaEvents.RaiseBetAreaHighlightEvent(betRule.CoveredNumbers, false);
             highlightGameObject.SetActive(false);

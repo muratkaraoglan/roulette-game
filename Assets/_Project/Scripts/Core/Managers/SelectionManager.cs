@@ -16,6 +16,8 @@ namespace _Project.Scripts.Core.Managers
 
         private void Update()
         {
+            if (GameManager.Instance.GameState != GameState.WaitingForBets) return;
+
             if (Input.GetMouseButtonDown(0))
             {
                 _mouseDownPosition = Input.mousePosition;
@@ -29,7 +31,7 @@ namespace _Project.Scripts.Core.Managers
 
             if (Input.GetMouseButtonUp(0))
             {
-                _interactable?.OnMouseUp();
+                _interactable?.OnDeselect();
                 if (_interactable is IBetAreaInteractable betAreaInteractable)
                 {
                     betAreaInteractable.TryPlaceBet();
@@ -47,7 +49,7 @@ namespace _Project.Scripts.Core.Managers
                 if (hit.collider.TryGetComponent(out IInteractable interactable))
                 {
                     _interactable = interactable;
-                    _interactable.OnMouseDown();
+                    _interactable.OnSelect();
                     if (debug)
                         Debug.DrawLine(ray.origin, hit.point, Color.red, 1f);
                 }
@@ -62,7 +64,7 @@ namespace _Project.Scripts.Core.Managers
             if (delta >= dragThresholdSqr)
             {
                 _mouseDownPosition = mousePosition;
-                _interactable?.OnMouseUp();
+                _interactable?.OnDeselect();
                 HandleInteract();
             }
         }

@@ -1,5 +1,6 @@
 using System;
 using _Project.Scripts.Core.Event;
+using _Project.Scripts.Core.Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,12 +36,13 @@ namespace _Project.Scripts.GamePlay.Roulette
 
         private void Spin()
         {
+            if (GameManager.Instance.GameState != GameState.WaitingForBets) return;
             if (!int.TryParse(deterministicInputField.text, out int value))
             {
                 value = Random.Range(MinValue, MaxValue);
             }
 
-            print(value);
+            GameEventManager.Instance.RouletteEvents.RaiseSpinStart();
             rouletteWheel.SpinToNumber(value);
         }
     }

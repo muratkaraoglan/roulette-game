@@ -6,12 +6,12 @@ namespace _Project.Scripts.GamePlay.BetSystem
 {
     public class StreetBetArea : BaseBetArea, IBetAreaInteractable
     {
-        public void OnMouseDown()
+        public void OnSelect()
         {
             GameEventManager.Instance.BetAreaEvents.RaiseBetAreaHighlightEvent(betRule.CoveredNumbers, true);
         }
 
-        public void OnMouseUp()
+        public void OnDeselect()
         {
             GameEventManager.Instance.BetAreaEvents.RaiseBetAreaHighlightEvent(betRule.CoveredNumbers, false);
         }

@@ -7,13 +7,13 @@ namespace _Project.Scripts.GamePlay.ChipSystem
     {
         [SerializeField] private ChipEnum chip;
 
-        public void OnMouseDown()
+        public void OnSelect()
         {
             print("selected chip:" + chip.ToString());
             ChipManager.Instance.ChangeSelectedChip(chip);
         }
         //TODO: wrong usage 
-        public void OnMouseUp()
+        public void OnDeselect()
         {
         }
     }

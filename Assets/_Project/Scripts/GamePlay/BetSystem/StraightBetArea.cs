@@ -51,12 +51,12 @@ namespace _Project.Scripts.GamePlay.BetSystem
 
         private void ChangeHighlight(bool highlightState) => highlightGameObject.SetActive(highlightState);
 
-        public void OnMouseDown()
+        public void OnSelect()
         {
             ChangeHighlight(true);
         }
 
-        public void OnMouseUp()
+        public void OnDeselect()
         {
             ChangeHighlight(false);
         }

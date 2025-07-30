@@ -89,14 +89,14 @@ namespace _Project.Scripts.GamePlay.Roulette
 
         public void SpinToNumber(int targetNumber)
         {
-            if (_isGameSpinning) return;
+            //if (_isGameSpinning) return;
             _targetNumber = targetNumber;
             StartCoroutine(SpinAnimation(targetNumber));
         }
 
         private IEnumerator SpinAnimation(int targetNumber)
         {
-            _isGameSpinning = true;
+            //_isGameSpinning = true;
             ballTransform.SetParent(null);
             StartGameSpin();
 

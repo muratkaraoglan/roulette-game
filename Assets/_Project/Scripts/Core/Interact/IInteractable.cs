@@ -2,8 +2,8 @@ namespace _Project.Scripts.Core.Interact
 {
     public interface IInteractable
     {
-       void OnMouseDown();
+       void OnSelect();
        
-       void OnMouseUp();
+       void OnDeselect();
     }
 }

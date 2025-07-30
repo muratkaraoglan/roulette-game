@@ -52,7 +52,6 @@ namespace _Project.Scripts.GamePlay.ChipSystem
             GameEventManager.Instance.RouletteEvents.OnSpinComplete -= OnSpinComplete;
         }
 
-
         private void OnSpinComplete(int targetNumber)
         {
             while (_usedChips.Count > 0)
