@@ -8,10 +8,10 @@ namespace _Project.Scripts.GamePlay.BetSystem
 {
     public class BetManager : MonoBehaviour
     {
-        [SerializeField] private int money = 500;
-
         private readonly Dictionary<string, int> _betAreasCount = new();
-
+        private const float ChipYOffset = .1f;
+        private const float ChipZOffset = .03f;
+        
         private void OnEnable()
         {
             GameEventManager.Instance.BetAreaEvents.TryPlaceChip += TryPlaceChip;
@@ -45,7 +45,7 @@ namespace _Project.Scripts.GamePlay.BetSystem
 
         private void OnSpinComplete(int targetNumber)
         {
-            var newAmount= DataManager.Instance.BetDataService.CalculateAllBetAmount(targetNumber);
+            var newAmount = DataManager.Instance.BetDataService.CalculateAllBetAmount(targetNumber);
             DataManager.Instance.MoneyService.AddMoney(newAmount);
             DataManager.Instance.BetDataService.ClearAllBets();
             _betAreasCount.Clear();
@@ -60,8 +60,8 @@ namespace _Project.Scripts.GamePlay.BetSystem
                 betCount++;
                 _betAreasCount[betArea.name] = betCount;
                 var position = betArea.position;
-                position.y += betCount * .1f;
-                position.z += betCount * .03f;
+                position.y += betCount * ChipYOffset;
+                position.z += betCount * ChipZOffset;
                 var bet = new Bet(betArea.name, (int)selectedChip, payoutMultiplier, coveredNumbers, selectedChip,
                     position);
                 DataManager.Instance.BetDataService.PlaceBet(bet);

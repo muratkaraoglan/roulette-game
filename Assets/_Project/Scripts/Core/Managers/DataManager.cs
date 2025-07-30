@@ -11,15 +11,13 @@ namespace _Project.Scripts.Core.Managers
 {
     public class DataManager : Singleton<DataManager>
     {
-        private Data data;
         public BetDataService BetDataService;
         public MoneyService MoneyService;
-        private string _path;
+        private ISaveService<Data> _saveService;
+        private Data _data;
 
         protected override void Awake()
         {
-            _path = Path.Combine(Application.persistentDataPath, "Data.json");
-            data = new Data();
             Configure(config =>
             {
                 config.Lazy = true;
@@ -27,51 +25,34 @@ namespace _Project.Scripts.Core.Managers
                 config.Persist = true;
             });
             base.Awake();
-            if (LoadData() == null)
-            {
-                data = new Data();
-                data.totalMoney = 5000;
-                data.bets = new();
-            }
-
-            BetDataService = new BetDataService(data.bets);
-            MoneyService = new MoneyService(data.totalMoney);
+            _saveService = new JsonFileDataServıce<Data>("data.json");
+            _data = _saveService.Load();
+            BetDataService = new BetDataService(_data.bets);
+            MoneyService = new MoneyService(_data.totalMoney);
         }
 
         private void OnApplicationQuit()
         {
-            SaveData();
+            _data.bets = BetDataService.GetAllBets();
+            _data.totalMoney = MoneyService.TotalMoney;
+            _saveService.Save(_data);
         }
 
         private void OnApplicationPause(bool pauseStatus)
         {
             if (pauseStatus)
             {
-                SaveData();
+                _data.bets = BetDataService.GetAllBets();
+                _data.totalMoney = MoneyService.TotalMoney;
+                _saveService.Save(_data);
             }
-        }
-
-        private void SaveData()
-        {
-            data.bets = BetDataService.GetAllBets();
-            data.totalMoney = MoneyService.TotalMoney;
-            string json = JsonUtility.ToJson(data);
-            File.WriteAllText(_path, json);
-        }
-
-        private Data LoadData()
-        {
-            if (!File.Exists(_path)) return null;
-            string json = File.ReadAllText(_path);
-            data = JsonUtility.FromJson<Data>(json);
-            return data;
         }
     }
 
     [Serializable]
     public class Data
     {
-        public int totalMoney;
+        public int totalMoney = 5000;
         public List<Bet> bets;
     }
 }
