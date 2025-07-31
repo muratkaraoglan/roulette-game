@@ -30,6 +30,7 @@ namespace _Project.Scripts.GamePlay.Roulette
             }
             else
             {
+                if (input.Equals("")) return;
                 deterministicInputField.text = MaxValue.ToString();
             }
         }
