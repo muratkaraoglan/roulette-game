@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace _Project.Scripts.Core.Stats
+namespace _Project.Scripts.GamePlay.Stats
 {
     [Serializable]
     public class SpinRecord

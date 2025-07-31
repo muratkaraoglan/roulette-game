@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-namespace _Project.Scripts.Core.Stats
+namespace _Project.Scripts.GamePlay.Stats
 {
     [Serializable]
     public class GameStatistics
@@ -19,42 +20,41 @@ namespace _Project.Scripts.Core.Stats
 
         [System.NonSerialized]
         private Dictionary<int, int> _numberFrequency;
-    
-        public Dictionary<int, int> NumberFrequency 
-        { 
-            get 
-            {
-                if (_numberFrequency == null)
-                    InitializeFrequencyDictionary();
-                return _numberFrequency;
-            }
-        }
- 
+        
+        public Dictionary<int, int> NumberFrequency => _numberFrequency;
+
         public GameStatistics()
         {
             numberFrequencyList = new List<NumberFrequency>();
-            InitializeFrequencyDictionary();
         }
-    
-        private void InitializeFrequencyDictionary()
+
+        public void InitializeFrequencyDictionary()
         {
             _numberFrequency = new Dictionary<int, int>();
-            
+        
+            // European roulette: 0-36 (37 numbers total)
             for (int i = 0; i <= 36; i++)
             {
                 _numberFrequency[i] = 0;
             }
-
-            if (numberFrequencyList != null)
+        
+            if (numberFrequencyList is { Count: > 0 })
             {
                 foreach (var freq in numberFrequencyList)
                 {
                     if (freq.number is >= 0 and <= 36)
+                    {
                         _numberFrequency[freq.number] = freq.frequency;
+                        Debug.Log($"Loaded: Number {freq.number} = {freq.frequency} times");
+                    }
                 }
             }
+            else
+            {
+                Debug.Log("No frequency data found in numberFrequencyList");
+            }
         }
-    
+
         public void UpdateFrequencyList()
         {
             numberFrequencyList.Clear();
@@ -66,14 +66,15 @@ namespace _Project.Scripts.Core.Stats
                 }
             }
         }
+
     }
-    
+
     [Serializable]
     public struct NumberFrequency
     {
         public int number;
         public int frequency;
-    
+
         public NumberFrequency(int num, int freq)
         {
             number = num;

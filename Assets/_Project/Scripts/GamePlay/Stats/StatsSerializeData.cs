@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace _Project.Scripts.Core.Stats
+namespace _Project.Scripts.GamePlay.Stats
 {
     [Serializable]
     public class StatsSerializeData

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using _Project.Scripts.Core.Event;
 using _Project.Scripts.Core.Managers;
-using _Project.Scripts.Core.Stats;
 using _Project.Scripts.GamePlay.ChipSystem;
+using _Project.Scripts.GamePlay.Stats;
 using UnityEngine;
 
 namespace _Project.Scripts.GamePlay.BetSystem

@@ -6,7 +6,7 @@ namespace _Project.Scripts.Core.Event
     {
         public BetAreaEvents BetAreaEvents;
         public RouletteEvents RouletteEvents;
-
+        public GameStatsEvent GameStatsEvent;
         protected override void Awake()
         {
             Configure(config =>
@@ -18,6 +18,7 @@ namespace _Project.Scripts.Core.Event
             base.Awake();
             BetAreaEvents = new BetAreaEvents();
             RouletteEvents = new RouletteEvents();
+            GameStatsEvent = new GameStatsEvent();
         }
     }
 }

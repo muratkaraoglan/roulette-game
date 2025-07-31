@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using _Project.Scripts.Core.Event;
 using _Project.Scripts.Core.Helper;
 using _Project.Scripts.Core.Services;
 using UnityEngine;
 
-namespace _Project.Scripts.Core.Stats
+namespace _Project.Scripts.GamePlay.Stats
 {
     public class GameDataTracker : Singleton<GameDataTracker>
     {
-        private List<SpinRecord> _spinHistory = new List<SpinRecord>();
-        private GameStatistics _currentStats = new GameStatistics();
+        private List<SpinRecord> _spinHistory;
+        private GameStatistics _currentStats;
         private ISaveService<StatsSerializeData> _saveService;
         [SerializeField] private StatsSerializeData _stats;
         public GameStatistics CurrentStats => _currentStats;
-
         private void Start()
         {
             Initialize();
@@ -26,6 +26,8 @@ namespace _Project.Scripts.Core.Stats
             _stats = _saveService.Load();
             _spinHistory = _stats.spinHistory;
             _currentStats = _stats.gameStatistics;
+            _currentStats.InitializeFrequencyDictionary();
+            GameEventManager.Instance.GameStatsEvent.RaiseOnStatsReady();
         }
 
         public void RecordSpin(int resultNumber, int betAmount, int winAmount)
@@ -35,6 +37,7 @@ namespace _Project.Scripts.Core.Stats
             _spinHistory.Add(spinRecord);
             UpdateStatics(spinRecord);
             SaveData();
+            GameEventManager.Instance.GameStatsEvent.RaiseOnStatsUpdated();
         }
 
         private void UpdateStatics(SpinRecord record)
@@ -101,20 +104,20 @@ namespace _Project.Scripts.Core.Stats
         public Dictionary<int, float> GetNumberProbabilities()
         {
             Dictionary<int, float> probabilities = new Dictionary<int, float>();
-
+            
             if (_currentStats.totalSpins == 0)
             {
-                var defaultProbability = 1f / 37f;
+                //var defaultProbability = 1f / 37f;
                 for (int i = 0; i <= 36; i++)
                 {
-                    probabilities[i] = defaultProbability;
+                    probabilities[i] = 0;
                 }
             }
             else
             {
                 for (int i = 0; i <= 36; i++)
                 {
-                    probabilities[i] = (float)_currentStats.NumberFrequency[i] / _currentStats.totalSpins;
+                    probabilities[i] = (float)_currentStats.NumberFrequency[i]/ _currentStats.totalSpins;
                 }
             }
 
@@ -147,13 +150,10 @@ namespace _Project.Scripts.Core.Stats
 
         void SaveData()
         {
-            _stats.gameStatistics = CurrentStats;
+            _stats.gameStatistics = _currentStats;
             _stats.spinHistory = _spinHistory;
             _saveService.Save(_stats);
         }
-
-        void LoadData()
-        {
-        }
+        
     }
 }
