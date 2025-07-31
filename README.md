@@ -83,7 +83,7 @@ Translated with DeepL.com (free version)
    - Interface Segregation: Focused, minimal interface contracts
    - Dependency Inversion: High-level modules depend on abstractions, not concretions
 
-6. Design Patterns:
+**6. Design Patterns**:
 
    - Object Pooling pattern for memory optimization
    - Template Method pattern in base classes
