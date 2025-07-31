@@ -24,22 +24,23 @@ To play the game:
 
 1.**Automated Stack Management**: A smart system will be developed to automatically optimize the stacks (tokens) in the betting area.
 
--How will  work?
+- **How will  work?**
 
-Automatic Consolidation: 10 chip of the same value will be automatically converted to the next higher value coin
-Example Scenario:
+-  Automatic Consolidation: 10 chip of the same value will be automatically converted to the next higher value coin
 
-10x1 chips → 1x10 chip
-10x5 chips → 1x50 chip
+- **Example Scenario**:
 
-Smart Optimization: The system will automatically select the most efficient combination of coins
+   -10x1 chips → 1x10 chip
+   -10x5 chips → 1x50 chip
 
-🎯 Benefits
+- **Smart Optimization**: The system will automatically select the most efficient combination of coins
 
-Cleaner and more organized betting area
-Reduced visual clutter
-Better experience for players
-Professional casino atmosphere
+**🎯 Benefits**
+
+   - Cleaner and more organized betting area
+   - Reduced visual clutter
+   - Better experience for players
+   - Professional casino atmosphere
 
 Translated with DeepL.com (free version)
 
