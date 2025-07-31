@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Project.Scripts.Core.Event;
+using _Project.Scripts.Core.Managers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -77,8 +78,6 @@ namespace _Project.Scripts.GamePlay.Roulette
         private void StartGameSpin()
         {
             SetWheelSpeed(gameSpinSpeed);
-
-            // spin sound
         }
 
         private void ReturnToIdleSpin()
@@ -101,7 +100,7 @@ namespace _Project.Scripts.GamePlay.Roulette
             StartGameSpin();
 
             var spinDuration = Random.Range(minSpinDuration, maxSpinDuration);
-
+            AudioManager.Instance.PlaySoundWithFade(SoundType.Spin, spinDuration);
             yield return StartCoroutine(SpinBall(targetNumber, spinDuration));
             ReturnToIdleSpin();
             yield return StartCoroutine(BallSettleAnimation());
@@ -212,7 +211,7 @@ namespace _Project.Scripts.GamePlay.Roulette
         {
             if (ballTransform == null) yield break;
 
-            // play bounce sound
+            AudioManager.Instance.PlaySound(SoundType.BallDrop);
             var finalPosition = Vector3.zero;
             var startPosition = ballTransform.localPosition;
 
