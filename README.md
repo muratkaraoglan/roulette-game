@@ -1,5 +1,7 @@
 # 🎰 Roulette Game - README
 
+https://github.com/user-attachments/assets/2298d0bc-191a-4e4f-b096-eee2cafa6e94
+
 ## 🎮 Controls and Gameplay Instructions
 
 To play the game:
@@ -20,16 +22,15 @@ To play the game:
 
 ## ⚙️ Future Improvements:
 
-1. A smart system will be developed to automatically optimize the stacks (tokens) in the betting area.
+1.**Automated Stack Management**: A smart system will be developed to automatically optimize the stacks (tokens) in the betting area.
 
-How will  work?
+-How will  work?
 
-Automatic Consolidation: 10 coins of the same value will be automatically converted to the next higher value coin
+Automatic Consolidation: 10 chip of the same value will be automatically converted to the next higher value coin
 Example Scenario:
 
-10x1 tokens → 1x10 token
-10x5 tokens → 1x50 token
-
+10x1 chips → 1x10 chip
+10x5 chips → 1x50 chip
 
 Smart Optimization: The system will automatically select the most efficient combination of coins
 
@@ -41,3 +42,11 @@ Better experience for players
 Professional casino atmosphere
 
 Translated with DeepL.com (free version)
+
+2. **📊 Roulette Wheel Statistics Display** :Statistics will be displayed with an interactive roulette wheel design instead of the current bar charts.
+
+   
+
+
+
+
