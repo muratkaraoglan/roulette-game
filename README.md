@@ -47,47 +47,47 @@ Translated with DeepL.com (free version)
 
 ## OOP Principles:
 
-**1. Encapsulation**
+**1. Encapsulation**:
 
--Private fields with controlled access across all components
--Unity SerializeField integration maintaining data protection
--Thread-safe operations with proper synchronization
--Constructor-based dependency injection for secure initialization
+   -Private fields with controlled access across all components
+   -Unity SerializeField integration maintaining data protection
+   -Thread-safe operations with proper synchronization
+   -Constructor-based dependency injection for secure initialization
 
-**2. Abstraction**
+**2. Abstraction**:
 
--Multiple interface layers (IObjectPool<T>, IInteractable, ISaveService<T>)
--Abstract base classes providing extensible templates
--Generic type systems with appropriate constraints
--Complex operations simplified through clean API surfaces
+   -Multiple interface layers (IObjectPool<T>, IInteractable, ISaveService<T>)
+   -Abstract base classes providing extensible templates
+   -Generic type systems with appropriate constraints
+   -Complex operations simplified through clean API surfaces
 
-**3. Inheritance**
+**3. Inheritance**:
 
--Hierarchical class structures with virtual method overriding
--MonoBehaviour integration for Unity-specific functionality
--Template method patterns in base classes
--Specialized implementations extending core functionality
+   -Hierarchical class structures with virtual method overriding
+   -MonoBehaviour integration for Unity-specific functionality
+   -Template method patterns in base classes
+   -Specialized implementations extending core functionality
 
-**4. Polymorphism**
+**4. Polymorphism**:
 
--Interface-driven design enabling interchangeable implementations
--Generic programming supporting multiple data types
--Runtime type identification and casting
--Uniform method signatures handling diverse object behaviors
+   -Interface-driven design enabling interchangeable implementations
+   -Generic programming supporting multiple data types
+   -Runtime type identification and casting
+   -Uniform method signatures handling diverse object behaviors
 
-**5. SOLID Principles**
+**5. SOLID Principles**:
 
--Single Responsibility: Each class manages one specific concern
--Open/Closed: System extensible through new implementations without modification
--Liskov Substitution: Derived classes fully compatible with base abstractions
--Interface Segregation: Focused, minimal interface contracts
--Dependency Inversion: High-level modules depend on abstractions, not concretions
+   -Single Responsibility: Each class manages one specific concern
+   -Open/Closed: System extensible through new implementations without modification
+   -Liskov Substitution: Derived classes fully compatible with base abstractions
+   -Interface Segregation: Focused, minimal interface contracts
+   -Dependency Inversion: High-level modules depend on abstractions, not concretions
 
-6. Design Patterns
+6. Design Patterns:
 
--Object Pooling pattern for memory optimization
--Template Method pattern in base classes
--Strategy pattern through interface implementations
+   -Object Pooling pattern for memory optimization
+   -Template Method pattern in base classes
+   -Strategy pattern through interface implementations
 
    
 
