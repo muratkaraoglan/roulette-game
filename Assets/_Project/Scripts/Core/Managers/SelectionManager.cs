@@ -54,6 +54,10 @@ namespace _Project.Scripts.Core.Managers
                         Debug.DrawLine(ray.origin, hit.point, Color.red, 1f);
                 }
             }
+            else
+            {
+                _interactable = null;
+            }
         }
 
         private void OnDrag()
