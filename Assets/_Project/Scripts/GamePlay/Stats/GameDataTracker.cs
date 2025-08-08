@@ -58,41 +58,22 @@ namespace _Project.Scripts.GamePlay.Stats
 
         private void UpdateStreaks(bool isWin)
         {
+            bool isSameStreak = _currentStats.isWinStreak == isWin;
+
+            _currentStats.currentStreak = isSameStreak 
+                ? _currentStats.currentStreak + 1 
+                : 1;
+
+            _currentStats.isWinStreak = isWin;
+
+            int current = _currentStats.currentStreak;
+
             if (isWin)
-            {
-                if (_currentStats.isWinStreak)
-                {
-                    _currentStats.currentStreak++;
-                }
-                else
-                {
-                    _currentStats.isWinStreak = true;
-                    _currentStats.currentStreak = 1;
-                }
-
-                if (_currentStats.currentStreak > _currentStats.longestWinStreak)
-                {
-                    _currentStats.longestWinStreak = _currentStats.currentStreak;
-                }
-            }
+                _currentStats.longestWinStreak = Math.Max(_currentStats.longestWinStreak, current);
             else
-            {
-                if (!_currentStats.isWinStreak)
-                {
-                    _currentStats.currentStreak++;
-                }
-                else
-                {
-                    _currentStats.isWinStreak = false;
-                    _currentStats.currentStreak = 1;
-                }
-
-                if (_currentStats.currentStreak > _currentStats.longestLoseStreak)
-                {
-                    _currentStats.longestLoseStreak = _currentStats.currentStreak;
-                }
-            }
+                _currentStats.longestLoseStreak = Math.Max(_currentStats.longestLoseStreak, current);
         }
+
 
         public void ResetSession()
         {
